@@ -23,7 +23,7 @@ class Compile {
   }
   // 是否为指令
   isDirective(name) {
-    return name.includes("v-")
+    return name.includes("v-");
   }
 
 
@@ -81,6 +81,7 @@ class Compile {
         this.compileElement(node);
         this.compile(node);
       } else {
+        // 文本
         this.compileText(node);
       }
     })
@@ -96,17 +97,27 @@ CompileUtil = {
   },
   // 文本处理
   text(node, vm, expr) {
+    if (expr.startsWith("{{") && expr.endsWith("}}")) { // {{}}
+      let updateFn = this.updater['textUpdater'];
 
+    } else { // v-text
+      let updateFn = this.updater['directiveTextUpdater'];
+      updateFn && updateFn(node, this.getVal(vm, expr));
+    }
   },
   // 输入框处理
   model(node, vm, expr) {
     let updateFn = this.updater['modelUpdater'];
-    updateFn && updateFn(node, this.getVal(vm, expr))
+    updateFn && updateFn(node, this.getVal(vm, expr));
   },
   updater: {
     // 文本更新
     textUpdater(node, value) {
       node.textContent = value;
+    },
+    // v-text
+    directiveTextUpdater(node, value) {
+      node.innerText = value;
     },
     // 输入框更新
     modelUpdater(node, value) {

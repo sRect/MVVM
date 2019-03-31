@@ -14,12 +14,14 @@
     <h1 v-text="msg.a"></h1>
     <div></div>
     <ul>
-      <li></li>
-      <li></li>
+      <li>1</li>
+      <li>{{}}</li>
     </ul>
     <p>{{msg.a}} {{msg.b}}</p>
   </div>
 
+  <script src="./watcher.js"></script>
+  <script src="./observer.js"></script>
   <script src="./compile.js"></script>
   <script src="./MVVM.js"></script>
   <script>
@@ -29,6 +31,10 @@
         msg: {
           a: "hello world",
           b: "你好"
+        },
+        b: null,
+        c: {
+          c_1: "wait..."
         }
       }
     })

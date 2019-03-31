@@ -94,9 +94,10 @@ CompileUtil = {
       return prev[next];
     }, vm.$data)
   },
+  // 获取编译文本后的结果
   getTextVal(vm, expr) {
     return expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
-      console.log(arguments);
+      // console.log(arguments);
       return this.getVal(vm, arguments[1]);
     });
   },

@@ -64,7 +64,6 @@ class Compile {
     // {{a}} {{b}}
     let expr = node.textContent; // 文本内容
     let reg = /\{\{([^}]+)\}\}/g;
-
     if (reg.test(expr)) {
       // node this.vm.$data expr
       CompileUtil['text'](node, this.vm, expr);
@@ -95,11 +94,19 @@ CompileUtil = {
       return prev[next];
     }, vm.$data)
   },
+  getTextVal(vm, expr) {
+    return expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
+      console.log(arguments);
+      return this.getVal(vm, arguments[1]);
+    });
+  },
   // 文本处理
   text(node, vm, expr) {
     if (expr.startsWith("{{") && expr.endsWith("}}")) { // {{}}
       let updateFn = this.updater['textUpdater'];
-
+      // {{MSGesture.a}}
+      let value = this.getTextVal(vm, expr);
+      updateFn && updateFn(node, value);
     } else { // v-text
       let updateFn = this.updater['directiveTextUpdater'];
       updateFn && updateFn(node, this.getVal(vm, expr));

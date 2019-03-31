@@ -17,17 +17,18 @@
       <li></li>
       <li></li>
     </ul>
-    <p>{{msg.a}}</p>
+    <p>{{msg.a}} {{msg.b}}</p>
   </div>
 
   <script src="./compile.js"></script>
   <script src="./MVVM.js"></script>
   <script>
-    new MVVM({
+    let vm = new MVVM({
       el: "#app",
       data: {
         msg: {
-          a: "hello"
+          a: "hello world",
+          b: "你好"
         }
       }
     })

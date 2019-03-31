@@ -19,7 +19,9 @@ class Watcher {
   }
 
   get() {
+    Dep.target = this;
     let val = this.getVal(this.vm, this.expr);
+    Dep.target = null;
     return val;
   }
 

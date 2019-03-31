@@ -101,21 +101,53 @@ CompileUtil = {
       return this.getVal(vm, arguments[1]);
     });
   },
+  setVal(vm, expr, value) {
+    expr = expr.split(".");
+    return expr.reduce((prev, next, currentIndex) => {
+      if (currentIndex === expr.length - 1) {
+        return prev[next] = value;
+      }
+      return prev[next];
+    }, vm.$data)
+  },
   // 文本处理
   text(node, vm, expr) {
     if (expr.startsWith("{{") && expr.endsWith("}}")) { // {{}}
       let updateFn = this.updater['textUpdater'];
-      // {{MSGesture.a}}
+      // {{msg.a}}
       let value = this.getTextVal(vm, expr);
+
+      // 文本节点数据变化，需重新获取依赖的属性更新文本内容
+      // {{a}} {{b}} {{c}}
+      expr.replace(/\{\{([^}]+)\}\}/g, (...arguments) => {
+        // console.log(arguments);
+        new Watcher(vm, arguments[1], () => {
+          updateFn && updateFn(node, this.getTextVal(vm, expr));
+        });
+      });
+
       updateFn && updateFn(node, value);
     } else { // v-text
       let updateFn = this.updater['directiveTextUpdater'];
+      new Watcher(vm, expr, () => {
+        updateFn && updateFn(node, this.getVal(vm, expr));
+      });
+
+      node.addEventListener('input', (e) => {
+        let newVal = e.target.value;
+        this.setVal(vm, expr, newVal);
+      })
+
       updateFn && updateFn(node, this.getVal(vm, expr));
     }
   },
   // 输入框处理
   model(node, vm, expr) {
     let updateFn = this.updater['modelUpdater'];
+    // 这里应该加一个监控 数据变化 就要调用watch的callback
+    new Watcher(vm, expr, () => {
+      updateFn && updateFn(node, this.getVal(vm, expr));
+    });
     updateFn && updateFn(node, this.getVal(vm, expr));
   },
   updater: {

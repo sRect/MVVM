@@ -72,6 +72,7 @@ class Compile {
     }
   }
 
+  // 节点转成文档碎片
   node2fragment(el) {
     let fragment = document.createDocumentFragment();
     let firstChild = null;
@@ -83,6 +84,7 @@ class Compile {
     return fragment;
   }
 
+  // 编译元素
   compileElement(node) {
     let attrs = node.attributes;
 
@@ -99,6 +101,7 @@ class Compile {
     })
   }
 
+  // 编译文本
   compileText(node) {
     ...
   }

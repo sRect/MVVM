@@ -189,6 +189,7 @@ class Observer {
   }
 }
 ```
+
 4. watcher.js(观察者)
 ```javascript
 class Watcher {

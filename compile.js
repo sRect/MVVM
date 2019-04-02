@@ -133,11 +133,6 @@ CompileUtil = {
         updateFn && updateFn(node, this.getVal(vm, expr));
       });
 
-      node.addEventListener('input', (e) => {
-        let newVal = e.target.value;
-        this.setVal(vm, expr, newVal);
-      })
-
       updateFn && updateFn(node, this.getVal(vm, expr));
     }
   },
@@ -148,6 +143,12 @@ CompileUtil = {
     new Watcher(vm, expr, () => {
       updateFn && updateFn(node, this.getVal(vm, expr));
     });
+
+    node.addEventListener('input', (e) => {
+      let newVal = e.target.value;
+      this.setVal(vm, expr, newVal);
+    })
+
     updateFn && updateFn(node, this.getVal(vm, expr));
   },
   updater: {

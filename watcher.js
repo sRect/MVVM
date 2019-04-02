@@ -19,7 +19,7 @@ class Watcher {
   }
 
   get() {
-    Dep.target = this;
+    Dep.target = this; // Dep.target为这个watcher对象
     let val = this.getVal(this.vm, this.expr);
     Dep.target = null;
     return val;
